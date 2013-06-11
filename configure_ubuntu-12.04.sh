@@ -9,9 +9,6 @@ sudo apt-get install -y \
 
 sudo easy_install pip ws4py gevent gevent-websocket tornado twisted txws supervisor
 
-# Clone master
-git clone git://github.com/ericmoritz/wsdemo.git wsdemo
-
 # Update sysctl
 sudo cp wsdemo/etc/sysctl.conf /etc/
 sudo sysctl -p
