@@ -7,7 +7,7 @@ var http = require('http')
 if (cluster.isMaster) {
   // Master Process
   var versionInfo = process.version.substr(1).split('.').map(function(v) { return parseInt(v); });
-  if (versionInfo[1] !== 8) {
+  if (versionInfo[1] < 8) {
     console.error('Please use node v0.8.0+\nAfter installing v0.8, please run "npm rebuild ws".');
     process.exit(-1);
   }
