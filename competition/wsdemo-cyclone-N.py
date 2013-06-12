@@ -4,6 +4,7 @@ import cyclone.websocket
 import sys
 from twisted.python     import log
 from twisted.internet   import reactor
+from prefork            import prefork, cpu_count
 
 
 class EchoApp(cyclone.web.Application):
@@ -28,6 +29,10 @@ class EchoSocketHandler(cyclone.websocket.WebSocketHandler):
 
 def main():
     reactor.listenTCP(8000, EchoApp())
+
+    num = cpu_count()
+    if prefork(num): exit()
+
     reactor.run()
 
 if __name__ == "__main__":
