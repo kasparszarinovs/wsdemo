@@ -15,20 +15,20 @@ echo "<doctype html>
   <table id=\"tbl\" class=\"tablesorter\">
     <thead>
       <tr>
-	<th>Implementation</th>
-	<th>Handshake Time (mean)</th>
-	<th>Handshake Time (stddev)</th>
-	<th>Handshake Time (median)</th>
-	<th>Handshake Time (95%)</th>
-	<th>Handshake Time (99%)</th>
-	<th>Handshake Time (99.9%)</th>
-	<th>Latency (mean)</th>
-	<th>Latency (stddev)</th>
-	<th>Latency (median)</th>
-	<th>Latency (95%)</th>
-	<th>Latency (99%)</th>
-	<th>Latency (99.9%)</th>
-	<th>Connection Timeouts</th>
+    	<th>Implementation</th>
+    	<th>Handshake Time (mean)</th>
+    	<th>Handshake Time (stddev)</th>
+    	<th>Handshake Time (median)</th>
+    	<th>Handshake Time (95%)</th>
+    	<th>Handshake Time (99%)</th>
+    	<th>Handshake Time (99.9%)</th>
+    	<th>Latency (mean)</th>
+    	<th>Latency (stddev)</th>
+    	<th>Latency (median)</th>
+    	<th>Latency (95%)</th>
+    	<th>Latency (99%)</th>
+    	<th>Latency (99.9%)</th>
+    	<th>Connection Timeouts</th>
       </tr>
    </thead>
    <tbody>" > $file
