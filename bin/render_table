@@ -4,42 +4,18 @@
 -mode(compile).
 
 compile_template() ->
-    erlydtl:compile(<<"<?DOCTYPE html>
-<meta charset=\"utf-8\">
-<style>
-  tr {
-    text-align: right;
-  }
-</style>
-<table>
-  <tr>
-     <th>Implementation</th>
-     <th>Handshake Time (mean)</th>
-     <th>Handshake Time (σ)</th>
-     <th>Handshake Time (median)</th>
-     <th>Handshake Time (95%)</th>
-     <th>Handshake Time (99%)</th>
-     <th>Handshake Time (99.9%)</th>
-     <th>Latency (mean)</th>
-     <th>Latency (σ)</th>
-     <th>Latency (median)</th>
-     <th>Latency (95%)</th>
-     <th>Latency (99%)</th>
-     <th>Latency (99.9%)</th>
-     <th>Connection Timeouts</th>
-  </tr>
-  {% for row in rows %}<tr>{% for col in row %}
-     <td>{{ col }}</td>{% endfor %}
-  </tr>{% endfor %}
-</table>">>, histogram_tmpl).
-    
+    erlydtl:compile(<<"{% for row in rows %}<tr>{% for col in row %}
+	<td>{{ col }}</td>{% endfor %}
+</tr>{% endfor %}">>, histogram_tmpl).
+
 
 histogram_columns(Histogram) ->
     Mean = proplists:get_value(arithmetic_mean, Histogram),
     Median = proplists:get_value(median, Histogram),
     Percentile = proplists:get_value(percentile, Histogram),
     StdDev = proplists:get_value(standard_deviation, Histogram),
-    [{50, P50}, {75, P75}, {90, P90}, {95, P95}, {99, P99}, {999, P999}] = Percentile,
+    % [_, {95, P95}, {99, P99}, {999, P999}] = Percentile,
+    [_, _, _, {95, P95}, {99, P99}, {999, P999}] = Percentile,
     lists:map(fun(N) -> trunc(N) / 1000 end, [Mean, StdDev, Median, P95, P99, P999]).
 
 columns(ServerName, Histograms, ConnectionTimeouts) ->
@@ -51,9 +27,9 @@ columns(ServerName, Histograms, ConnectionTimeouts) ->
     lists:flatten(Columns).
 
 row_score(Row) ->
-    [_ServerName, 
-     HSMean, HSStdDev, _HSMedian, _HSP95, _HSP99, _HSP999, 
-     MLMean, MLStdDev, _MLMedian, _MLP95, _MLP99, _MLP999, 
+    [_ServerName,
+     HSMean, HSStdDev, _HSMedian, _HSP95, _HSP99, _HSP999,
+     MLMean, MLStdDev, _MLMedian, _MLP95, _MLP99, _MLP999,
      ConnectionTimeouts] = Row,
     {ConnectionTimeouts, HSMean, HSStdDev, MLMean, MLStdDev}.
 
@@ -75,7 +51,7 @@ main(Roots) ->
 
     Rows = lists:map(fun(Root) ->
                              HistogramFN = filename:join(Root, "histogram.config"),
-                             case file:consult(HistogramFN) of 
+                             case file:consult(HistogramFN) of
                                  {ok, [{ServerName, Histograms}]} ->
                                      ConnectionTimeouts = connection_timeouts(Root),
                                      columns(ServerName, Histograms, ConnectionTimeouts);
